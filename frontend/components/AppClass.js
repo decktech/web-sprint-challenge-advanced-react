@@ -128,6 +128,7 @@ export default class AppClass extends React.Component {
   onChange = (evt) => {
     // You will need this to update the value of the input.
     const { value } = evt.target
+    value.includes()
     this.setState({
       ...this.state,
       email: value
@@ -140,12 +141,22 @@ export default class AppClass extends React.Component {
     axios.post(`http://localhost:9000/api/result`, { x: this.getXY(this.state.index).x, y: this.getXY(this.state.index).y, steps: this.state.steps, email: this.state.email })
       .then(res => {
         console.log(res)
-        // this.setState({
-        //   ...this.state,
-        //   message
-        // })
+        this.setState({
+          ...this.state,
+          message: res.data.message
+        })
       })
-    this.reset()
+      .catch(err => {
+        console.log(err)
+        this.setState({
+          ...this.state,
+          message: err.response.data.message
+        })
+      })
+    this.setState({
+      ...this.state,
+      email: initialEmail
+    })
   }
 
   render() {
@@ -154,8 +165,8 @@ export default class AppClass extends React.Component {
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">Coordinates (2, 2)</h3>
-          <h3 id="steps">You moved 0 times</h3>
+          <h3 id="coordinates">Coordinates ({this.getXY(index).x}, {this.getXY(index).y})</h3>
+          <h3 id="steps">You moved {this.state.steps} time{this.state.steps===1 ? null : 's'}</h3>
         </div>
         <div id="grid">
           {
