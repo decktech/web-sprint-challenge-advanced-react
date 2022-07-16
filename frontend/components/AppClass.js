@@ -128,7 +128,6 @@ export default class AppClass extends React.Component {
   onChange = (evt) => {
     // You will need this to update the value of the input.
     const { value } = evt.target
-    value.includes()
     this.setState({
       ...this.state,
       email: value
